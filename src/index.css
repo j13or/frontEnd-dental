@@ -15,7 +15,7 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #f1192f;
+  background-color: #007893;
   border-radius: 1em;
 }
 
@@ -25,7 +25,7 @@
 
 :root {
   --body-black: #000000;
-  --body-yeloow: #f5eded;
+  --body-yeloow: #e0fffd;
   --body-white: #ffffff;
   --body-light: #f4f9fc;
   --body-gray: #0d0f0f;
@@ -37,7 +37,7 @@
   --text-color-beige: #f8f8f8;
   --text-color-white: #ffffff;
   --text-color-gray: rgb(57, 57, 57);
-  --text-color-grayLigth: rgb(202, 202, 202);
+  --text-color-grayLigth: rgb(173, 173, 173);
   --text-color-blue: #053781;
   --text-color-darkSkyBlue: #26aec1;
   --text-color-skyBlue: #4ce8db;

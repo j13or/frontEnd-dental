@@ -3,6 +3,7 @@ import axios from 'axios';
 import config from '../../utils/getToken';
 import './calendarioStyle/calendarioSelectPaciente.css';
 import CrearCita from './CrearCita';
+import { useParams } from 'react-router-dom';
 
 const CalendarioSelectPaciente = ({
   crud,
@@ -10,6 +11,7 @@ const CalendarioSelectPaciente = ({
   verPacientes,
   setVerPacientes,
 }) => {
+  const { id } = useParams();
   const [pacientes, setPacientes] = useState([]);
   const [search, setSearch] = useState('');
   const [selectPaciente, setSelectPaciente] = useState();
@@ -17,7 +19,7 @@ const CalendarioSelectPaciente = ({
   useEffect(() => {
     const url = `${
       import.meta.env.VITE_URL_API
-    }/paciente?search=${search}`;
+    }/paciente/consultorio/${id}/?search=${search}`;
     axios
       .get(url, config)
       .then((res) => {

@@ -3,16 +3,21 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import '../../pages/pagesStyle/crud.css';
 import config from '../../utils/getToken';
+import { useParams } from 'react-router-dom';
 
 const CrearPacientes = ({ crud, setCrud }) => {
+  const { id } = useParams();
+
   const { register, handleSubmit, reset } = useForm();
+
   const submit = (data) => {
     const url = `${import.meta.env.VITE_URL_API}/paciente`;
 
     axios
-      .post(url, data, config)
+      .post(url, { ...data, consultorioId: id }, config)
       .then((res) => {
         setCrud('');
+        toast.success('El paciente  se creo exitosamente');
       })
       .catch((err) => {
         console.log(err);

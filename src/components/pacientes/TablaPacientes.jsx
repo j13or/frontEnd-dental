@@ -1,12 +1,14 @@
 import React from 'react';
 import '../../pages/pagesStyle/tables.css';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 const TablaPacientes = ({
   pacientes,
   setSelectPaciente,
   setCrud,
 }) => {
+  const { id } = useParams();
+
   return (
     <table className="table__container">
       <thead>
@@ -21,12 +23,7 @@ const TablaPacientes = ({
           <th>Alergia</th>
           <th style={{ width: '100px' }}>Tipo de Sangre</th>
           <th style={{ width: '120px' }}>Historial</th>
-          <th className="tablle__tdButton" style={{ width: '100px' }}>
-            Editar
-          </th>
-          <th className="tablle__tdButton" style={{ width: '100px' }}>
-            Eliminar
-          </th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -43,11 +40,12 @@ const TablaPacientes = ({
             <td>{paciente.alergia}</td>
             <td>{paciente.tipoDeSangre}</td>
             <td onClick={() => setSelectPaciente(paciente)}>
-              <Link to={`/historial/${paciente.id}`}>
+              <Link
+                to={`/consultorio/${id}/historial/${paciente.id}`}
+              >
                 Ver Historial
               </Link>
             </td>
-
             <td className="tablle__tdButton">
               <button
                 className="edit-button"
@@ -56,10 +54,8 @@ const TablaPacientes = ({
                   setCrud('updateUser');
                 }}
               >
-                Editar
+                <i className="bx bxs-edit-alt"></i>
               </button>
-            </td>
-            <td className="tablle__tdButton">
               <button
                 className="delete-button"
                 onClick={() => {
@@ -67,7 +63,7 @@ const TablaPacientes = ({
                   setCrud('deleteUser');
                 }}
               >
-                Eliminar
+                <i className="bx bxs-trash"></i>
               </button>
             </td>
           </tr>

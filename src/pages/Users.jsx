@@ -6,24 +6,33 @@ import CreateUser from '../components/users/CreateUser';
 import UpdateUser from '../components/users/UpdateUser';
 import DeleteUser from '../components/users/DeleteUser';
 import config from '../utils/getToken';
+import { useParams } from 'react-router-dom';
 
 const Users = () => {
+  const { id } = useParams();
   const [crud, setCrud] = useState('');
   const [allUsers, setallUsers] = useState();
   const [selectUser, setSelectUser] = useState();
 
   useEffect(() => {
-    const url = `${import.meta.env.VITE_URL_API}/usuario`;
+    let url;
+    if (id) {
+      url = `${
+        import.meta.env.VITE_URL_API
+      }/usuario/consultorio/${id}`;
+    } else {
+      url = `${import.meta.env.VITE_URL_API}/usuario`;
+    }
+
     axios
       .get(url, config)
       .then((res) => {
         setallUsers(res.data.usuarios);
       })
-
       .catch((err) => {
         console.log(err);
       });
-  }, [crud]);
+  }, [id, crud]); // Asegúrate de incluir consultorioId en la lista de dependencias si lo estás utilizando dentro del useEffect
 
   return (
     <div className="users__container">

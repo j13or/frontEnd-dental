@@ -8,8 +8,11 @@ import config from '../utils/getToken';
 import TablaCitas from '../components/calendario/TablaCitas';
 import EditarCita from '../components/calendario/EditarCita';
 import EliminarCita from '../components/calendario/EliminarCita';
+import { useParams } from 'react-router-dom';
 
 const Calendar = () => {
+  const { id } = useParams();
+
   const [crud, setCrud] = useState('');
   const [verPacientes, setVerPacientes] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -18,7 +21,9 @@ const Calendar = () => {
   const [selectCita, setSelectCita] = useState();
 
   useEffect(() => {
-    const url = `${import.meta.env.VITE_URL_API}/cita`;
+    const url = `${
+      import.meta.env.VITE_URL_API
+    }/cita/consultorio/${id}`;
     axios
       .get(url, config)
       .then((res) => {
@@ -54,6 +59,7 @@ const Calendar = () => {
     });
   };
 
+  console.log(allCitas);
   const renderDays = () => {
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -91,7 +97,17 @@ const Calendar = () => {
             <ul key={index}>
               <li
                 style={{
-                  color: 'var(--text-color-red)',
+                  color: 'var(--text-color-blue)',
+                  fontWeight: '500',
+                }}
+              >
+                {cita.paciente.nombres}{' '}
+                {cita.paciente.apellidoPaterno}{' '}
+                {cita.paciente.apellidoMaterno}
+              </li>
+              <li
+                style={{
+                  color: 'var(--text-color-darkSkyBlue)',
                   fontWeight: '500',
                 }}
               >

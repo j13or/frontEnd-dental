@@ -22,6 +22,7 @@ function App() {
   const userData = JSON.parse(userDataJSON);
   const [idConsultorio, setidConsultorio] = useState();
 
+  console.log(userData?.usuario?.consultorioId);
   return (
     <>
       <ToastContainer />

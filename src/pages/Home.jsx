@@ -3,8 +3,10 @@ import axios from 'axios';
 import config from '../utils/getToken';
 import './pagesStyle/home.css';
 import GraficaPorMes from '../components/home/GraficaPorMes';
+import { useParams } from 'react-router-dom';
 
-const Home = () => {
+const Home = ({ setidConsultorio }) => {
+  const { id } = useParams();
   const today = new Date();
   const year = today.getFullYear();
   const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Obtener el mes actual y agregar un cero si es necesario
@@ -12,12 +14,12 @@ const Home = () => {
   const [consultas, setConsultas] = useState();
   const [citas, setCitas] = useState();
   const [pacientes, setPacientes] = useState();
-  const [allConsultas, setallConsultas] = useState();
 
   useEffect(() => {
+    setidConsultorio(id);
     const url = `${
       import.meta.env.VITE_URL_API
-    }/consulta?mes=${month}&año=${year}`;
+    }/consulta/consultorio/${id}/?mes=${month}&año=${year}`;
     axios
       .get(url, config)
       .then((res) => {
@@ -26,7 +28,7 @@ const Home = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     const today = new Date(Date.now() - 5 * 60 * 60 * 1000);
@@ -34,7 +36,7 @@ const Home = () => {
 
     const url = `${
       import.meta.env.VITE_URL_API
-    }/cita?fecha=${formattedDate}`;
+    }/cita/consultorio/${id}/?fecha=${formattedDate}`;
     axios
       .get(url, config)
       .then((res) => {
@@ -43,10 +45,12 @@ const Home = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
-    const url = `${import.meta.env.VITE_URL_API}/paciente`;
+    const url = `${
+      import.meta.env.VITE_URL_API
+    }/paciente/consultorio/${id}`;
     axios
       .get(url, config)
       .then((res) => {
@@ -57,19 +61,6 @@ const Home = () => {
       });
   }, []);
 
-  console.log(consultas);
-
-  useEffect(() => {
-    const url = `${import.meta.env.VITE_URL_API}/consulta`;
-    axios
-      .get(url, config)
-      .then((res) => {
-        setallConsultas(res.data.consultas);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
   return (
     <div className="home__container">
       <section className="home__sectionOne">
@@ -89,7 +80,7 @@ const Home = () => {
           <i className="bx bxs-user-account"></i>
         </div>
       </section>
-      <GraficaPorMes allConsultas={allConsultas} />
+      <GraficaPorMes allConsultas={consultas} />
     </div>
   );
 };

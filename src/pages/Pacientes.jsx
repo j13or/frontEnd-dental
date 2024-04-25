@@ -6,8 +6,10 @@ import CrearPacientes from '../components/pacientes/CrearPacientes';
 import EliminarPaciente from '../components/pacientes/EliminarPaciente';
 import TablaPacientes from '../components/pacientes/TablaPacientes';
 import EditarPaciente from '../components/pacientes/EditarPaciente';
+import { useParams } from 'react-router-dom';
 
 const Pacientes = () => {
+  const { id } = useParams();
   const [crud, setCrud] = useState('');
   const [pacientes, setPacientes] = useState();
   const [selectPaciente, setSelectPaciente] = useState();
@@ -18,7 +20,7 @@ const Pacientes = () => {
   useEffect(() => {
     const url = `${
       import.meta.env.VITE_URL_API
-    }/paciente?search=${search}`;
+    }/paciente/consultorio/${id}/?search=${search}`;
     axios
       .get(url, config)
       .then((res) => {
@@ -33,7 +35,7 @@ const Pacientes = () => {
   const filterPacientes = () => {
     const url = `${
       import.meta.env.VITE_URL_API
-    }/paciente?search=${search}`;
+    }/paciente/consultorio/${id}?search=${search}`;
     axios
       .get(url, config)
       .then((res) => {
@@ -75,7 +77,7 @@ const Pacientes = () => {
         setCrud={setCrud}
       />
 
-      <CrearPacientes setCrud={setCrud} crud={crud} />
+      <CrearPacientes setCrud={setCrud} crud={crud} id={id} />
       <EditarPaciente
         setCrud={setCrud}
         crud={crud}

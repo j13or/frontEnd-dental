@@ -4,8 +4,10 @@ import axios from 'axios';
 import config from '../utils/getToken';
 import TablaConsultas from '../components/consultas/TablaConsultas';
 import * as XLSX from 'xlsx';
+import { useParams } from 'react-router-dom';
 
 const Reportes = () => {
+  const { id } = useParams();
   const today = new Date().toISOString().split('T')[0];
   const [crud, setCrud] = useState('');
   const [consultas, setConsultas] = useState();
@@ -14,7 +16,7 @@ const Reportes = () => {
   useEffect(() => {
     const url = `${
       import.meta.env.VITE_URL_API
-    }/consulta?date=${date}`;
+    }/consulta/consultorio/${id}/?date=${date}`;
     axios
       .get(url, config)
       .then((res) => {
@@ -24,6 +26,8 @@ const Reportes = () => {
         console.log(err);
       });
   }, [crud, date]);
+
+  console.log(consultas);
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import './calendarioStyle/crearCita.css';
 import config from '../../utils/getToken';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const CrearCita = ({
   crud,
@@ -10,24 +12,48 @@ const CrearCita = ({
   selectPaciente,
   setSelectPaciente,
 }) => {
+  const { id } = useParams();
+
   const { register, handleSubmit, reset } = useForm();
-  console.log(selectPaciente);
+  const [fecha, setFecha] = useState('');
+  const fechaSeleccionada = new Date(fecha);
+
   const submit = (data) => {
     const url = `${import.meta.env.VITE_URL_API}/cita/paciente/${
       selectPaciente?.id
     }`;
 
-    axios
-      .post(url, data, config)
-      .then((res) => {
-        setCrud('');
-        setSelectPaciente();
-      })
-      .catch((err) => {
-        setCrud('');
-        setSelectPaciente();
-      });
-    // reset();
+    const fechaSeleccionada = new Date(fecha);
+    const fechaNumero =
+      (fechaSeleccionada.getDate() + 1) * 1000000 +
+      (fechaSeleccionada.getMonth() + 1) * 10000 +
+      fechaSeleccionada.getFullYear();
+
+    const fechaActual = new Date();
+    const fechaActualNumero =
+      fechaActual.getDate() * 1000000 +
+      (fechaActual.getMonth() + 1) * 10000 +
+      fechaActual.getFullYear();
+    console.log(fechaNumero);
+
+    if (fechaNumero >= fechaActualNumero) {
+      axios
+        .post(url, { ...data, consultorioId: id }, config)
+        .then((res) => {
+          setCrud('');
+          setSelectPaciente();
+          toast.success('La cita  se creo exitosamente');
+        })
+        .catch((err) => {
+          setCrud('');
+          setSelectPaciente();
+        });
+      reset();
+    } else {
+      toast.error(
+        'La fecha seleccionada no puede ser anterior a la fecha actual'
+      );
+    }
   };
 
   function soloLetrasYEspacios(event) {
@@ -81,6 +107,7 @@ const CrearCita = ({
                 {...register('fecha')}
                 id="fecha"
                 type="date"
+                onChange={(e) => setFecha(e.target.value)}
                 required
               />
             </div>

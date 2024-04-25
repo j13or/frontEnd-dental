@@ -1,26 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import '../../pages/pagesStyle/crud.css';
 import soloLetrasYEspacios from '../../hooks/LetrasYespacios';
+import config from '../../utils/getToken';
+import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
 
 const CreateUser = ({ crud, setCrud }) => {
+  const { id } = useParams();
+
   const { register, handleSubmit, reset } = useForm();
+  const [allConsultorios, setallConsultorios] = useState();
 
   const submit = (data) => {
-    const url = `${import.meta.env.VITE_URL_API}/usuario/signup`;
+    let url;
+    if (id) {
+      url = `${import.meta.env.VITE_URL_API}/usuario/signup/${id}`;
+    } else {
+      url = `${import.meta.env.VITE_URL_API}/usuario/signup/${
+        data.consultorioId || 0
+      }`;
+    }
 
     axios
-      .post(url, data)
+      .post(url, data, config)
       .then((res) => {
         setCrud('');
+        toast.success('El usuario se creó exitosamente');
       })
       .catch((err) => {
         console.log(err);
         setCrud('');
+        toast.error('Hubo un error al crear el usuario');
       });
     reset();
   };
+
+  useEffect(() => {
+    const url = `${import.meta.env.VITE_URL_API}/consultorio`;
+    axios
+      .get(url, config)
+      .then((res) => {
+        setallConsultorios(res.data.consultorios);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div
@@ -32,6 +60,28 @@ const CreateUser = ({ crud, setCrud }) => {
         <h3>Nuevo Usuario</h3>
         {crud === 'createUser' ? (
           <section className="crud__sectionOne">
+            {' '}
+            {!id && (
+              <div className="crud__div">
+                <label htmlFor="consultorioId">
+                  Seleccione Un Consultorio:
+                </label>
+                <select
+                  {...register('consultorioId')}
+                  id="consultorioId"
+                  type="text"
+                >
+                  {allConsultorios.map((consultorio) => (
+                    <option
+                      value={consultorio.id}
+                      key={consultorio.id}
+                    >
+                      {consultorio.nombreConsultorio}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div className="crud__div">
               <label htmlFor="nombres">Nombres:</label>
               <input
@@ -87,8 +137,12 @@ const CreateUser = ({ crud, setCrud }) => {
                 type="text"
                 required
               >
-                <option value="doctor">Administrador</option>
-                <option value="secretaria">Doctor</option>
+                {!id && (
+                  <option value="SuperAdmin">SuperAdmin</option>
+                )}
+                <option value="Administrador">Administrador</option>
+                <option value="Doctor">Doctor</option>
+                <option value="Secretaria">Secretaria</option>
               </select>
             </div>
           </section>

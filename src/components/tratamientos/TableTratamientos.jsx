@@ -1,36 +1,31 @@
 import React from 'react';
 import '../../pages/pagesStyle/tables.css';
 
-const TableUsers = ({ allUsers, setSelectUser, setCrud }) => {
+const TableTratamientos = ({
+  allTratamientos,
+  setSelectTratamiento,
+  setCrud,
+}) => {
   return (
     <table className="table__container">
       <thead>
         <tr>
-          <th>Nombres</th>
-          <th>Apellidos</th>
-          <th>Correo</th>
-          <th>Telefono</th>
-          <th>Consultorio</th>
-          <th>Rol</th>
-          <th>Estado</th>
+          <th>Nombre del Tratamiento</th>
+          <th>Precio</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
-        {allUsers?.map((user) => (
-          <tr key={user.id}>
-            <td>{user.nombres}</td>
-            <td>{user.apellidos}</td>
-            <td>{user.email}</td>
-            <td>{user.telefono}</td>
-            <td>{user?.consultorio?.nombreConsultorio}</td>
-            <td>{user.rol}</td>
-            <td>{user.estado}</td>
+        {allTratamientos?.map((tratamiento) => (
+          <tr key={tratamiento.id}>
+            <td>{tratamiento.nombre}</td>
+            <td>{tratamiento.precio}</td>
+
             <td className="tablle__tdButton">
               <button
                 className="edit-button"
                 onClick={() => {
-                  setSelectUser(user);
+                  setSelectTratamiento(tratamiento);
                   setCrud('updateUser');
                 }}
               >
@@ -39,7 +34,7 @@ const TableUsers = ({ allUsers, setSelectUser, setCrud }) => {
               <button
                 className="delete-button"
                 onClick={() => {
-                  setSelectUser(user);
+                  setSelectTratamiento(tratamiento);
                   setCrud('deleteUser');
                 }}
               >
@@ -53,4 +48,4 @@ const TableUsers = ({ allUsers, setSelectUser, setCrud }) => {
   );
 };
 
-export default TableUsers;
+export default TableTratamientos;

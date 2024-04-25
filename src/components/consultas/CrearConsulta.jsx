@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import config from '../../utils/getToken';
 import './consultasStyle/crearConsulta.css';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 const CrearConsulta = ({
   crud,
   setCrud,
@@ -13,6 +15,8 @@ const CrearConsulta = ({
   setVerPacientes,
   setVerOdontograma,
 }) => {
+  const { id } = useParams();
+
   const { register, handleSubmit, reset } = useForm();
 
   const submit = (data) => {
@@ -20,18 +24,26 @@ const CrearConsulta = ({
       selectPaciente.id
     }`;
 
-    const newData = {
-      data,
-      tratamientosDental: listaTratamientos,
-    };
+    const formData = new FormData();
+    formData.append('linkFile', selectedFileImg);
+
+    // Agregar otros datos al FormData
+    formData.append('data', JSON.stringify(data));
+    formData.append(
+      'tratamientosDental',
+      JSON.stringify(listaTratamientos)
+    );
+    formData.append('consultorioId', id);
+
     axios
-      .post(url, newData, config)
+      .post(url, formData, config)
       .then((res) => {
         setListaTratamientos([]);
         setCrud('');
         setSelectDiente();
         setVerPacientes(false);
         setVerOdontograma(false);
+        toast.success('La consulta  se creo exitosamente');
       })
       .catch((err) => {
         console.log(err);
@@ -102,9 +114,27 @@ const CrearConsulta = ({
               <input
                 {...register('montoTotal')}
                 id="montoTotals"
-                type="montoTotal"
+                type="number"
                 value={montoTotal()}
                 required
+              />
+            </div>
+            <div className="crearConsultaForm__div">
+              <label htmlFor="adelantoPago">Adelanto de pago:</label>
+              <input
+                {...register('adelantoPago')}
+                id="adelantoPago"
+                type="number"
+                required
+              />
+            </div>
+            <div className="crearConsultaForm__div">
+              <label htmlFor="linkFile">Subir Odontograma:</label>
+              <input
+                {...register('linkFile')}
+                name="linkFile"
+                id="linkFile"
+                type="file"
               />
             </div>
           </section>

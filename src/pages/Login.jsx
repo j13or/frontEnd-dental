@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import './pagesStyle/login.css';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const { register, handleSubmit, reset } = useForm();
@@ -22,7 +23,7 @@ const Login = () => {
       })
 
       .catch((err) => {
-        toast.error(err.data);
+        console.log(err);
       });
 
     reset();

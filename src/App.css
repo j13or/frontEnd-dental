@@ -5,6 +5,10 @@
   transition: filter 300ms;
 }
 
+.input[type='number' i] {
+  display: none !important;
+}
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }

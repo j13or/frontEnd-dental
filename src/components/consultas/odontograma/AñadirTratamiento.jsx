@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../consultasStyle/AñadirTratamiento.css';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import config from '../../../utils/getToken';
 
 const AñadirTratamiento = ({
-  selectPaciente,
   selectDiente,
   setSelectDiente,
   setListaTratamientos,
   listaTratamientos,
 }) => {
+  const { id } = useParams();
   const { register, handleSubmit, reset } = useForm();
-
-  console.log(selectDiente);
+  const [allTratamientos, setallTratamientos] = useState();
   const [dienteSeleccionado, setDienteSeleccionado] = useState(
     selectDiente?.codigoDiente
   );
@@ -19,6 +21,21 @@ const AñadirTratamiento = ({
   const [tratamientoSeleccionado, setTratamientoSeleccionado] =
     useState('');
   const [precio, setPrecio] = useState('');
+
+  useEffect(() => {
+    const url = `${
+      import.meta.env.VITE_URL_API
+    }/tratamiento/consultorio/${id}`;
+    axios
+      .get(url, config)
+      .then((res) => {
+        setallTratamientos(res.data.tratamientos);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [id]);
 
   useEffect(() => {
     setTratamientoSeleccionado(
@@ -29,58 +46,11 @@ const AñadirTratamiento = ({
     setPrecio(
       listaTratamientos.find(
         (item) => Number(item.codigoDiente) === dienteSeleccionado
-      )?.precio || 0
+      )?.precio
     );
   }, [dienteSeleccionado]);
-  const fechaActual = new Date().getFullYear();
-  const fechaNacimiento = new Date(
-    selectPaciente?.fechaDeNacimiento
-  ).getFullYear();
-  const esMayorDe14 = fechaActual - fechaNacimiento > 14;
 
-  const numberDientes = [];
-  let limiteSuperior;
-  if (esMayorDe14) {
-    limiteSuperior = 48;
-    for (let i = 11; i <= limiteSuperior; i++) {
-      if (
-        i === 18 ||
-        i === 20 ||
-        i === 29 ||
-        i === 30 ||
-        i === 39 ||
-        i === 40
-      ) {
-        continue;
-      }
-      numberDientes.push(i);
-    }
-  } else {
-    limiteSuperior = 85;
-    for (let i = 51; i <= limiteSuperior; i++) {
-      if (
-        i === 56 ||
-        i === 57 ||
-        i === 58 ||
-        i === 59 ||
-        i === 60 ||
-        i === 66 ||
-        i === 67 ||
-        i === 68 ||
-        i === 69 ||
-        i === 70 ||
-        i === 76 ||
-        i === 77 ||
-        i === 78 ||
-        i === 79 ||
-        i === 80
-      ) {
-        continue;
-      }
-      numberDientes.push(i);
-    }
-  }
-
+  console.log(listaTratamientos);
   const handleDienteChange = (e) => {
     const nuevoDiente = e.target.value;
     setDienteSeleccionado(nuevoDiente);
@@ -89,45 +59,18 @@ const AñadirTratamiento = ({
   const handleTratamientoChange = (e) => {
     const nuevoTratamiento = e.target.value;
     setTratamientoSeleccionado(nuevoTratamiento);
+
+    setPrecio(
+      allTratamientos?.find(
+        (item) => item.nombre === nuevoTratamiento
+      )?.precio
+    );
   };
 
   const handleprecioChange = (e) => {
     const precio = e.target.value;
     setPrecio(precio);
   };
-
-  const tratamientos = [
-    'Apiceptomía',
-    'Carillas',
-    'Cirugía',
-    'Cororona',
-    'Curetaje',
-    'Endodoncia',
-    'Esquelético',
-    'Estética',
-    'Exploración',
-    'Extrusión',
-    'Furcas',
-    'Girar',
-    'Impresiones',
-    'Inclinación',
-    'Limpieza',
-    'Movilidad',
-    'Obturación',
-    'Ortodoncia',
-    'Perno',
-    'Puente',
-    'Quitar',
-    'Radiografía',
-    'Reconstrucción',
-    'Sangrado',
-    'Sellador',
-    'Sensibilidad',
-    'Supurado',
-    'Tornillo',
-    'Tornillo Solo',
-    'Tratamiento',
-  ];
 
   const submit = (data) => {
     const updatedList = listaTratamientos.map((item) => {
@@ -141,7 +84,7 @@ const AñadirTratamiento = ({
         (item) => item.codigoDiente === data.codigoDiente
       )
     ) {
-      updatedList.push(data);
+      updatedList.push({ ...data, precio });
     }
     setListaTratamientos(updatedList);
     setSelectDiente();
@@ -176,11 +119,9 @@ const AñadirTratamiento = ({
               onChange={handleDienteChange}
               required
             >
-              {numberDientes.map((diente, index) => (
-                <option key={index} value={diente}>
-                  {diente}
-                </option>
-              ))}
+              <option value={selectDiente.codigoDiente}>
+                {selectDiente.codigoDiente}
+              </option>
             </select>
           </div>
           <div className="AñadirTratamientoForm__div">
@@ -195,9 +136,10 @@ const AñadirTratamiento = ({
               onChange={handleTratamientoChange}
               required
             >
-              {tratamientos.map((traamiento, index) => (
-                <option key={index} value={traamiento}>
-                  {traamiento}
+              <option value=""></option>
+              {allTratamientos?.map((tratamiento, index) => (
+                <option key={index} value={tratamiento.nombre}>
+                  {tratamiento.nombre}
                 </option>
               ))}
             </select>
@@ -205,7 +147,6 @@ const AñadirTratamiento = ({
           <div className="AñadirTratamientoForm__div">
             <label htmlFor="precio">Precio:</label>
             <input
-              {...register('precio')}
               id="precio"
               type="number"
               value={precio}

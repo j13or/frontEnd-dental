@@ -3,6 +3,7 @@ import axios from 'axios';
 import config from '../../utils/getToken';
 import Odontograma from './odontograma/Odontograma';
 import './consultasStyle/consultaPaciente.css';
+import { useParams } from 'react-router-dom';
 
 const ConsultaPacientea = ({
   crud,
@@ -10,6 +11,8 @@ const ConsultaPacientea = ({
   verPacientes,
   setVerPacientes,
 }) => {
+  const { id } = useParams();
+
   const [pacientes, setPacientes] = useState([]);
   const [search, setSearch] = useState('');
   const [verOdontograma, setVerOdontograma] = useState(false);
@@ -18,7 +21,7 @@ const ConsultaPacientea = ({
   useEffect(() => {
     const url = `${
       import.meta.env.VITE_URL_API
-    }/paciente?search=${search}`;
+    }/paciente/consultorio/${id}/?search=${search}`;
     axios
       .get(url, config)
       .then((res) => {

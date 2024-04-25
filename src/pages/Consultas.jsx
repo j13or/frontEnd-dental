@@ -6,8 +6,10 @@ import TablaConsultas from '../components/consultas/TablaConsultas';
 import ConsultaPacientea from '../components/consultas/ConsultaPacientea';
 import CrearPacientes from '../components/pacientes/CrearPacientes';
 import ListaTratamiento from '../components/consultas/ListaTratamiento';
+import { useParams } from 'react-router-dom';
 
 const Consultas = () => {
+  const { id } = useParams();
   const today = new Date().toISOString().split('T')[0];
   const [crud, setCrud] = useState('');
   const [consultas, setConsultas] = useState();
@@ -18,7 +20,7 @@ const Consultas = () => {
   useEffect(() => {
     const url = `${
       import.meta.env.VITE_URL_API
-    }/consulta?date=${date}`;
+    }/consulta/consultorio/${id}/?date=${date}`;
     axios
       .get(url, config)
       .then((res) => {

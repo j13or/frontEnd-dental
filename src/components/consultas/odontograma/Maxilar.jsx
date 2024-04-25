@@ -23,7 +23,7 @@ const Maxilar = ({
   for (let i = 11; i <= limiteSuperior; i++) {
     maxilarIzquierdo.push({
       id: esMayorDe14 ? i - 10 : i + 40,
-      codigoDiente: i,
+      codigoDiente: esMayorDe14 ? i - 10 : i + 40,
       dienteGlb: `/dientes3d/${i}.glb`,
     });
   }
@@ -34,7 +34,7 @@ const Maxilar = ({
   for (let i = 21; i <= limiteSuperiorDerecho; i++) {
     maxilarDerecho.push({
       id: esMayorDe14 ? i - 10 : i + 40,
-      codigoDiente: i,
+      codigoDiente: esMayorDe14 ? i - 10 : i + 40,
       dienteGlb: `/dientes3d/${i}.glb`,
     });
   }

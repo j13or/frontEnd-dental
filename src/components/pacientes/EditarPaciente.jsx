@@ -159,6 +159,7 @@ const EditarPaciente = ({
             type="button"
             onClick={() => {
               setCrud(''), setSelectPaciente();
+              reset();
             }}
           >
             Cancelar

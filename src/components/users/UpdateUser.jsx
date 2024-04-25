@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import config from '../../utils/getToken';
+import { toast } from 'react-toastify';
 
 const UpdateUser = ({ crud, setCrud, selectUser, setSelectUser }) => {
   const { register, handleSubmit, reset } = useForm();
+  const [allConsultorios, setallConsultorios] = useState();
 
   const submit = (data) => {
     const url = `${import.meta.env.VITE_URL_API}/usuario/${
@@ -16,6 +18,9 @@ const UpdateUser = ({ crud, setCrud, selectUser, setSelectUser }) => {
       .then((res) => {
         setCrud('');
         setSelectUser();
+        toast.success(
+          'Los datos del usuario  se actualizo exitosamente'
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -23,6 +28,19 @@ const UpdateUser = ({ crud, setCrud, selectUser, setSelectUser }) => {
       });
     reset();
   };
+
+  useEffect(() => {
+    const url = `${import.meta.env.VITE_URL_API}/consultorio`;
+    axios
+      .get(url, config)
+      .then((res) => {
+        setallConsultorios(res.data.consultorios);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   function soloLetrasYEspacios(event) {
     const charCode = event.which ? event.which : event.keyCode;
@@ -45,6 +63,22 @@ const UpdateUser = ({ crud, setCrud, selectUser, setSelectUser }) => {
         <h3> Usuario {selectUser?.nombres}</h3>
         {crud === 'updateUser' ? (
           <section className="crud__sectionOne">
+            <div className="crud__div">
+              <label htmlFor="consultorioId">
+                Seleccione Un Consultorio:
+              </label>
+              <select
+                {...register('consultorioId')}
+                id="consultorioId"
+                type="text"
+              >
+                {allConsultorios.map((consultorio) => (
+                  <option key={consultorio.id} value={consultorio.id}>
+                    {consultorio.nombreConsultorio}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="crud__div">
               <label htmlFor="nombres">Nombres:</label>
               <input
@@ -94,11 +128,24 @@ const UpdateUser = ({ crud, setCrud, selectUser, setSelectUser }) => {
                 {...register('rol')}
                 id="rol"
                 type="text"
-                defaultValue={selectUser?.rol}
                 required
               >
-                <option value="administrador">Administrador</option>
-                <option value="doctor">Doctor</option>
+                <option value="SuperAdmin">SuperAdmin</option>
+                <option value="Administrador">Administrador</option>
+                <option value="Doctor">Doctor</option>
+                <option value="Secretaria">Secretaria</option>
+              </select>
+            </div>
+            <div className="crud__div">
+              <label htmlFor="estado">Estado:</label>
+              <select
+                {...register('estado')}
+                id="estado"
+                defaultValue={selectUser.estado}
+                required
+              >
+                <option value="Activo">Activo</option>
+                <option value="Desconectado">Desconectado</option>
               </select>
             </div>
           </section>
@@ -107,7 +154,7 @@ const UpdateUser = ({ crud, setCrud, selectUser, setSelectUser }) => {
           <button
             type="button"
             onClick={() => {
-              setCrud(''), setSelectUser();
+              setCrud(''), setSelectUser(), reset();
             }}
           >
             Cancelar
