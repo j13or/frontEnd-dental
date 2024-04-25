@@ -10,29 +10,151 @@ import Calendario from './pages/Calendario';
 import Consultas from './pages/Consultas';
 import HistorialPacientes from './pages/HistorialPacientes';
 import Reportes from './pages/Reportes';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Consultorios from './pages/Consultorios';
+import { useState } from 'react';
+import Tratamientos from './pages/Tratamientos';
+import Perfil from './pages/Perfil';
 
 function App() {
   const userDataJSON = localStorage.getItem('userData');
   const userData = JSON.parse(userDataJSON);
+  const [idConsultorio, setidConsultorio] = useState();
 
-  console.log(userData);
   return (
     <>
-      {userData ? <Header /> : null}
+      <ToastContainer />
+
+      {userData ? (
+        <Header
+          userData={userData?.usuario}
+          idConsultorio={idConsultorio}
+        />
+      ) : null}
       <Routes>
         <Route path="/log-in" element={<Login />} />
         <Route element={<ProtectedRoutes />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/pacientes" element={<Pacientes />} />
-          <Route path="/calendario" element={<Calendario />} />
-          <Route path="/consultas" element={<Consultas />} />
-          <Route
-            path="/historial/:id"
-            element={<HistorialPacientes />}
-          />
+          <Route path="/" element={<Consultorios />} />
         </Route>
-        <Route path="/reportes" element={<Reportes />} />
+        {userData?.usuario?.rol === 'SuperAdmin' && (
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/users" element={<Users />} />
+
+            <Route
+              path="/consultorio/:id/inicio"
+              element={<Home setidConsultorio={setidConsultorio} />}
+            />
+            <Route
+              path="/consultorio/:id/pacientes"
+              element={<Pacientes />}
+            />
+            <Route
+              path="/consultorio/:id/calendario"
+              element={<Calendario />}
+            />
+            <Route
+              path="/consultorio/:id/consultas"
+              element={<Consultas />}
+            />
+            <Route
+              path="/consultorio/:consultorioId/historial/:id"
+              element={<HistorialPacientes />}
+            />
+            <Route
+              path="/consultorio/:id/reportes"
+              element={<Reportes />}
+            />
+            <Route
+              path="/consultorio/:id/tratamiento"
+              element={<Tratamientos />}
+            />
+            <Route
+              path="/consultorio/:id/users"
+              element={<Users />}
+            />
+          </Route>
+        )}
+        {userData?.usuario?.rol === 'Administrador' && (
+          <Route element={<ProtectedRoutes />}>
+            <Route
+              path="/perfil"
+              element={<Perfil userData={userData?.usuario} />}
+            />
+
+            <Route path="/users" element={<Users />} />
+            <Route
+              path="/consultorio/:id/inicio"
+              element={<Home setidConsultorio={setidConsultorio} />}
+            />
+            <Route
+              path="/consultorio/:id/pacientes"
+              element={<Pacientes />}
+            />
+            <Route
+              path="/consultorio/:id/calendario"
+              element={<Calendario />}
+            />
+            <Route
+              path="/consultorio/:id/consultas"
+              element={<Consultas />}
+            />
+            <Route
+              path="/consultorio/:consultorioId/historial/:id"
+              element={<HistorialPacientes />}
+            />
+            <Route
+              path="/consultorio/:id/reportes"
+              element={<Reportes />}
+            />
+            <Route
+              path="/consultorio/:id/tratamiento"
+              element={<Tratamientos />}
+            />
+            <Route
+              path="/consultorio/:id/users"
+              element={<Users />}
+            />
+          </Route>
+        )}
+        {userData?.usuario?.rol === 'Doctor' && (
+          <Route element={<ProtectedRoutes />}>
+            <Route
+              path="/perfil"
+              element={<Perfil userData={userData?.usuario} />}
+            />
+
+            <Route path="/users" element={<Users />} />
+            <Route
+              path="/consultorio/:id/inicio"
+              element={<Home setidConsultorio={setidConsultorio} />}
+            />
+            <Route
+              path="/consultorio/:id/pacientes"
+              element={<Pacientes />}
+            />
+            <Route
+              path="/consultorio/:id/calendario"
+              element={<Calendario />}
+            />
+            <Route
+              path="/consultorio/:id/consultas"
+              element={<Consultas />}
+            />
+            <Route
+              path="/consultorio/:consultorioId/historial/:id"
+              element={<HistorialPacientes />}
+            />
+            <Route
+              path="/consultorio/:id/reportes"
+              element={<Reportes />}
+            />
+            <Route
+              path="/consultorio/:id/tratamiento"
+              element={<Tratamientos />}
+            />
+          </Route>
+        )}
       </Routes>
     </>
   );
