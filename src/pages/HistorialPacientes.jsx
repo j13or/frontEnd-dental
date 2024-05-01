@@ -2,15 +2,18 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import config from '../utils/getToken';
 import { useParams } from 'react-router-dom';
-import ListaTratamiento from '../components/consultas/ListaTratamiento';
+import ListaTratamiento from '../components/planTratamiento/ListaTratamiento';
 import './pagesStyle/historialPaciente.css';
+import AgregarConsulta from '../components/historialPacientes/AgregarConsulta';
+import HistorialConsultas from '../components/historialPacientes/HistorialConsultas';
 const HistorialPacientes = () => {
   const { id } = useParams();
 
   const [consultas, setConsultas] = useState();
+  const [crud, setcrud] = useState();
   const [tratamientosConsulta, setTratamientosConsulta] = useState();
-  const [allCitas, setallCitas] = useState();
   const [verCitas, setverCitas] = useState(false);
+  const [allCitas, setallCitas] = useState();
 
   useEffect(() => {
     const url = `${import.meta.env.VITE_URL_API}/cita/paciente/${id}`;
@@ -28,7 +31,7 @@ const HistorialPacientes = () => {
   useEffect(() => {
     const url = `${
       import.meta.env.VITE_URL_API
-    }/consulta/paciente/${id}`;
+    }/plan-tratamiento/paciente/${id}`;
     axios
       .get(url, config)
       .then((res) => {
@@ -38,7 +41,7 @@ const HistorialPacientes = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, [id]);
+  }, [id, crud]);
 
   return (
     <div className="HistorialPacientes__container">
@@ -79,37 +82,87 @@ const HistorialPacientes = () => {
         </section>
       ) : (
         <section className="HistorialPacientes__sectionTwo">
-          <h3> Consultas</h3>
+          <h3>Tratamientos del paciente</h3>
           <table className="table__container">
             <thead>
               <tr>
-                <th>Consulta</th>
-                <th>Descripcion</th>
+                <th>Titulo</th>
+                <th>Observaciones</th>
+                <th style={{ width: '150px' }}>Precio Total</th>
+                <th style={{ width: '150px' }}>Acuenta</th>
+                <th style={{ width: '150px' }}>Deuda</th>
                 <th style={{ width: '150px' }}>
-                  Lista de Tratamientos
+                  Documento de la Consulta
                 </th>
-                <th style={{ width: '100px' }}>Precio Total</th>
+                <th style={{ width: '150px' }}>Odontograma </th>
+                <th>historial del cosultas</th>
+                <th>Agregar cosultas</th>
               </tr>
             </thead>
             <tbody>
-              {consultas?.consultas.map((consulta) => (
+              {consultas?.planTratamiento?.map((consulta) => (
                 <tr key={consulta.id}>
                   <td>{consulta.titulo}</td>
-                  <td>{consulta.descripcion}</td>
-                  <td
-                    onClick={() => setTratamientosConsulta(consulta)}
-                  >
-                    Ver Lista
-                  </td>
+                  <td>{consulta.observaciones}</td>
                   <td>{consulta.montoTotal}</td>
+                  <td>{consulta.acuenta}</td>
+                  <td>{consulta.deuda}</td>
+
+                  <td>
+                    <a
+                      href={consulta.linkFile}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Ver Documento
+                    </a>
+                  </td>
+                  <td
+                    onClick={() => {
+                      setcrud('view'),
+                        setTratamientosConsulta(consulta);
+                    }}
+                  >
+                    Ver odontograma
+                  </td>
+                  <td
+                    onClick={() => {
+                      setcrud('consultas'),
+                        setTratamientosConsulta(consulta);
+                    }}
+                  >
+                    ver historial de consultas
+                  </td>
+                  <td
+                    onClick={() => {
+                      setcrud('create'),
+                        setTratamientosConsulta(consulta);
+                    }}
+                  >
+                    agregar cosulta
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </section>
       )}
+      {crud === 'view' && (
+        <ListaTratamiento
+          tratamientosConsulta={tratamientosConsulta}
+          setTratamientosConsulta={setTratamientosConsulta}
+        />
+      )}
 
-      <ListaTratamiento
+      <HistorialConsultas
+        crud={crud}
+        setCrud={setcrud}
+        tratamientosConsulta={tratamientosConsulta}
+        setTratamientosConsulta={setTratamientosConsulta}
+      />
+      <AgregarConsulta
+        crud={crud}
+        setCrud={setcrud}
         tratamientosConsulta={tratamientosConsulta}
         setTratamientosConsulta={setTratamientosConsulta}
       />

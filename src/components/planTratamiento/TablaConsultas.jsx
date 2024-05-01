@@ -8,9 +8,10 @@ const TablaConsultas = ({ consultas }) => {
           <th>Paciente</th>
           <th>Telefono</th>
           <th>Consulta</th>
-          <th>Descripcion</th>
+          <th>Observaciones</th>
           <th style={{ width: '150px' }}>Precio Total</th>
-          <th style={{ width: '150px' }}>Adelanto de Pago</th>
+          <th style={{ width: '150px' }}>Acuenta</th>
+          <th style={{ width: '150px' }}>Deuda</th>
           <th style={{ width: '150px' }}>Documento de la Consulta</th>
         </tr>
       </thead>
@@ -24,9 +25,11 @@ const TablaConsultas = ({ consultas }) => {
             </td>
             <td>{consulta?.paciente.telefono}</td>
             <td>{consulta.titulo}</td>
-            <td>{consulta.descripcion}</td>
+            <td>{consulta.observaciones}</td>
             <td>{consulta.montoTotal}</td>
-            <td>{consulta.adelantoPago}</td>
+            <td>{consulta.acuenta}</td>
+            <td>{consulta.deuda}</td>
+
             <td>
               <a
                 href={consulta.linkFile}

@@ -4,11 +4,14 @@ import axios from 'axios';
 import '../../pages/pagesStyle/crud.css';
 import config from '../../utils/getToken';
 import { useParams } from 'react-router-dom';
+import { useState } from 'react';
 
 const CrearPacientes = ({ crud, setCrud }) => {
   const { id } = useParams();
 
   const { register, handleSubmit, reset } = useForm();
+  const [selectAlergia, setselectAlergia] = useState();
+  const [fecha, setFecha] = useState('');
 
   const submit = (data) => {
     const url = `${import.meta.env.VITE_URL_API}/paciente`;
@@ -24,6 +27,7 @@ const CrearPacientes = ({ crud, setCrud }) => {
         setCrud('');
       });
     reset();
+    setFecha();
   };
 
   function soloLetrasYEspacios(event) {
@@ -116,21 +120,37 @@ const CrearPacientes = ({ crud, setCrud }) => {
               <label htmlFor="fechaDeNacimiento">
                 Fecha de Nacimiento:
               </label>
+
               <input
                 {...register('fechaDeNacimiento')}
                 id="fechaDeNacimiento"
                 type="date"
                 required
+                value={fecha}
+                onChange={(e) => setFecha(e.target.value)}
               />
             </div>
             <div className="crud__div">
-              <label htmlFor="alergia">Alergias:</label>
-              <input
-                {...register('alergia')}
-                id="alergia"
+              <label htmlFor="selecAlergia">Alergias:</label>
+
+              <select
+                id="selecAlergia"
                 type="text"
                 required
-              />
+                value={selectAlergia}
+                onChange={(e) => setselectAlergia(e.target.value)}
+              >
+                <option value="no">no</option>
+                <option value="si">si</option>
+              </select>
+              {selectAlergia === 'si' && (
+                <input
+                  {...register('alergia')}
+                  id="alergia"
+                  type="text"
+                  required
+                />
+              )}
             </div>
             <div className="crud__div">
               <label htmlFor="tipoDeSangre">Tipo de Sangre:</label>

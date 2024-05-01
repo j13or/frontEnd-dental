@@ -4,6 +4,7 @@ import axios from 'axios';
 import '../../pages/pagesStyle/crud.css';
 import soloLetrasYEspacios from '../../hooks/LetrasYespacios';
 import config from '../../utils/getToken';
+import { toast } from 'react-toastify';
 
 const NuevoPaciente = ({ crud, setCrud }) => {
   const { register, handleSubmit, reset } = useForm();
@@ -15,10 +16,12 @@ const NuevoPaciente = ({ crud, setCrud }) => {
       .post(url, data, config)
       .then((res) => {
         setCrud('');
+        toast.success('El paciente  se creo exitosamente');
       })
       .catch((err) => {
         console.log(err);
         setCrud('');
+        toast.error('hubo un error al crear el paciente');
       });
     reset();
   };

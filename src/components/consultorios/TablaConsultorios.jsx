@@ -7,12 +7,15 @@ const TablaConsultorios = ({
   setSelectConsultorio,
   setCrud,
 }) => {
+  console.log(allConsultorios);
   return (
     <table className="table__container">
       <thead>
         <tr>
           <th>Nombre del Consultorio</th>
           <th>Direccion del Consultorio</th>
+          <th>Telefono</th>
+          <th>Ubicacion</th>
           <th>Ver Consultorio</th>
           <th></th>
         </tr>
@@ -22,6 +25,17 @@ const TablaConsultorios = ({
           <tr key={consultorios.id}>
             <td>{consultorios.nombreConsultorio}</td>
             <td>{consultorios.direccion}</td>
+            <td>{consultorios.telefono}</td>
+            <td>
+              <a
+                href={consultorios.linkGoogleMaps}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                ver en mapa
+              </a>
+            </td>
+
             <td>
               {' '}
               <Link to={`/consultorio/${consultorios.id}/inicio`}>

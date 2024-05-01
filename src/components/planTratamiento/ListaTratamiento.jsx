@@ -17,7 +17,7 @@ const ListaTratamiento = ({
         <div className="calendarioSelectPaciente__container">
           <section className="calendarioSelectPaciente__sectionOne">
             <h2>
-              Lista de tratamientos de la Consulta{' '}
+              odontograma del tratamiento{' '}
               {tratamientosConsulta?.titulo}
             </h2>
             <article>

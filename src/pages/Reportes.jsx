@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './pagesStyle/consultas.css';
 import axios from 'axios';
 import config from '../utils/getToken';
-import TablaConsultas from '../components/consultas/TablaConsultas';
+import TablaConsultas from '../components/planTratamiento/TablaConsultas';
 import * as XLSX from 'xlsx';
 import { useParams } from 'react-router-dom';
 

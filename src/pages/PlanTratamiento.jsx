@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import './pagesStyle/consultas.css';
 import axios from 'axios';
 import config from '../utils/getToken';
-import TablaConsultas from '../components/consultas/TablaConsultas';
-import ConsultaPacientea from '../components/consultas/ConsultaPacientea';
+import TablaConsultas from '../components/planTratamiento/TablaConsultas';
+import ConsultaPacientea from '../components/planTratamiento/ConsultaPacientea';
 import CrearPacientes from '../components/pacientes/CrearPacientes';
-import ListaTratamiento from '../components/consultas/ListaTratamiento';
+import ListaTratamiento from '../components/planTratamiento/ListaTratamiento';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-const Consultas = () => {
+const PlanTratamiento = () => {
   const { id } = useParams();
   const today = new Date().toISOString().split('T')[0];
   const [crud, setCrud] = useState('');
@@ -20,11 +21,12 @@ const Consultas = () => {
   useEffect(() => {
     const url = `${
       import.meta.env.VITE_URL_API
-    }/consulta/consultorio/${id}/?date=${date}`;
+    }/plan-tratamiento/consultorio/${id}/?date=${date}`;
     axios
       .get(url, config)
       .then((res) => {
-        setConsultas(res.data.consultas);
+        console.log(res);
+        setConsultas(res.data.planTratamientos);
       })
 
       .catch((err) => {
@@ -43,12 +45,12 @@ const Consultas = () => {
   return (
     <div className="consultas__container">
       <section className="consultas__sectionOne">
-        <h1> Consultas</h1>
+        <h1> Plan de Tratamiento</h1>
       </section>
       <section className="consultas__sectionTwo">
-        <h2>Tus Consultas de {today === date ? 'Hoy' : date}</h2>
+        <h2>Tus Tratamientos {today === date ? 'Hoy' : date}</h2>
         <button onClick={() => setVerPacientes(true)}>
-          Nueva Consulta
+          Nueva Tratamiento
         </button>
       </section>
       <section className="consultas__sectionThree">
@@ -79,4 +81,4 @@ const Consultas = () => {
   );
 };
 
-export default Consultas;
+export default PlanTratamiento;

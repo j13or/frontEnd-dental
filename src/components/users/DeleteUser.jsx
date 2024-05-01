@@ -27,7 +27,8 @@ const DeleteUser = ({ crud, setCrud, selectUser }) => {
     >
       <form className="crud__form">
         <h3>
-          Seguro que quiere eliminar al usuario {selectUser?.nombres}?
+          Seguro que quiere desactivar al usuario{' '}
+          {selectUser?.nombres}?
         </h3>
 
         <section className="crud__sectionTwo">
@@ -43,7 +44,7 @@ const DeleteUser = ({ crud, setCrud, selectUser }) => {
             className="crud__button"
             onClick={handleSubmit}
           >
-            Eliminar
+            Desactivar
           </button>
         </section>
       </form>

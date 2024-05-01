@@ -155,6 +155,14 @@
   width: 100%;
   font-size: 13px;
 }
+.dias p {
+  margin-bottom: -10px;
+}
+
+.dias p {
+  font-size: 10px;
+}
+
 .empty-day {
   position: relative;
   border: 1px solid #ccc;

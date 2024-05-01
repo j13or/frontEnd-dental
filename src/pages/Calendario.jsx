@@ -9,6 +9,7 @@ import TablaCitas from '../components/calendario/TablaCitas';
 import EditarCita from '../components/calendario/EditarCita';
 import EliminarCita from '../components/calendario/EliminarCita';
 import { useParams } from 'react-router-dom';
+import EditarCitaLinea from '../components/calendario/EditarCitaLinea';
 
 const Calendar = () => {
   const { id } = useParams();
@@ -19,6 +20,7 @@ const Calendar = () => {
   const [allCitas, setallCitas] = useState();
   const [verTabla, setVerTabla] = useState(false);
   const [selectCita, setSelectCita] = useState();
+  const [allCitasEnLinea, setallCitasEnLinea] = useState();
 
   useEffect(() => {
     const url = `${
@@ -28,6 +30,21 @@ const Calendar = () => {
       .get(url, config)
       .then((res) => {
         setallCitas(res.data.citas);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [crud]);
+
+  useEffect(() => {
+    const url = `${
+      import.meta.env.VITE_URL_API
+    }/cita-linea/consultorio/${id}`;
+    axios
+      .get(url, config)
+      .then((res) => {
+        setallCitasEnLinea(res.data.citasEnLinea);
       })
 
       .catch((err) => {
@@ -59,7 +76,7 @@ const Calendar = () => {
     });
   };
 
-  console.log(allCitas);
+  console.log(allCitasEnLinea);
   const renderDays = () => {
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -72,11 +89,15 @@ const Calendar = () => {
     }
 
     for (let i = 1; i <= daysCount; i++) {
-      const currentDay = i.toString().padStart(2, '0'); // Agregamos un cero al día si es necesario
+      const currentDay = i.toString().padStart(2, '0');
       const currentDate = `${year}-${(month + 1)
         .toString()
         .padStart(2, '0')}-${currentDay}`;
 
+      const citasLineaForDay = allCitasEnLinea?.filter((cita) => {
+        const citaDate = cita.fecha;
+        return currentDate === citaDate;
+      });
       const citasForDay = allCitas?.filter((cita) => {
         const citaDate = cita.fecha;
         return currentDate === citaDate;
@@ -115,6 +136,44 @@ const Calendar = () => {
               </li>
               <li style={{ color: 'var(--text-color-gray)' }}>
                 {cita.descripcion}
+              </li>
+            </ul>
+          ))}
+          {citasLineaForDay?.length > 0 && <p>citas en linea:</p>}
+          {citasLineaForDay?.map((cita, index) => (
+            <ul
+              key={index}
+              onClick={() => {
+                if (cita.estado === 'confirmar') {
+                  setCrud('updateCitaLinea');
+                  setSelectCita(cita);
+                }
+              }}
+            >
+              {cita.estado === 'confirmar' && (
+                <li style={{ fontSize: '10px' }}>por confirmar</li>
+              )}
+              <li
+                style={{
+                  color:
+                    cita.estado === 'confirmar'
+                      ? 'var(--text-color-grayLigth)'
+                      : 'var(--text-color-blue)',
+                  fontWeight: '500',
+                }}
+              >
+                {cita.nombresApellidos}{' '}
+              </li>
+              <li
+                style={{
+                  color:
+                    cita.estado === 'confirmar'
+                      ? 'var(--text-color-grayLigth)'
+                      : 'var(--text-color-gray)',
+                  fontWeight: '500',
+                }}
+              >
+                {cita.comentario}{' '}
               </li>
             </ul>
           ))}
@@ -170,6 +229,12 @@ const Calendar = () => {
         </section>
       )}
       <EditarCita
+        setCrud={setCrud}
+        crud={crud}
+        selectCita={selectCita}
+        setSelectCita={setSelectCita}
+      />{' '}
+      <EditarCitaLinea
         setCrud={setCrud}
         crud={crud}
         selectCita={selectCita}

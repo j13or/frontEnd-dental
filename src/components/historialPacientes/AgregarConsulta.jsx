@@ -1,23 +1,33 @@
+import axios from 'axios';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import '../../pages/pagesStyle/crud.css';
 import config from '../../utils/getToken';
 import { toast } from 'react-toastify';
 
-const CrearConsultorio = ({ crud, setCrud }) => {
+const AgregarConsulta = ({ crud, setCrud, tratamientosConsulta }) => {
   const { register, handleSubmit, reset } = useForm();
+
+  console.log(tratamientosConsulta);
   const submit = (data) => {
-    const url = `${import.meta.env.VITE_URL_API}/consultorio`;
+    const url = `${import.meta.env.VITE_URL_API}/consulta/${
+      tratamientosConsulta.id
+    }`;
 
     axios
-      .post(url, data, config)
+      .post(
+        url,
+        {
+          ...data,
+          consultorioId: tratamientosConsulta.consultorioId,
+        },
+        config
+      )
       .then((res) => {
         setCrud('');
-        toast.success('El consultorio  se creo exitosamente');
+        toast.success('La consulta  se creo exitosamente');
       })
       .catch((err) => {
-        toast.error('hubo un error al crear el consultorio');
+        toast.error('hubo un error al crear la consulta');
         setCrud('');
       });
     reset();
@@ -30,44 +40,46 @@ const CrearConsultorio = ({ crud, setCrud }) => {
       }`}
     >
       <form className="crud__form" onSubmit={handleSubmit(submit)}>
-        <h3>Nuevo Paciente</h3>
+        <h3>
+          Nuevo Consulta para el tratamiento{' '}
+          {tratamientosConsulta?.titulo}
+        </h3>
         {crud === 'create' ? (
           <section className="crud__sectionOne">
             <div className="crud__div">
-              <label htmlFor="nombreConsultorio">
-                Nombre del Consultorio:
-              </label>
+              <label htmlFor="titulo">Titulo:</label>
               <input
-                {...register('nombreConsultorio')}
-                id="nombreConsultorio"
+                {...register('titulo')}
+                id="titulo"
                 type="text"
                 required
               />
             </div>
             <div className="crud__div">
-              <label htmlFor="direccion">Direccion:</label>
-              <input
-                {...register('direccion')}
-                id="direccion"
+              <label htmlFor="descripcion">Observaciones:</label>
+              <textarea
+                {...register('descripcion')}
+                id="descripcion"
                 type="text"
+                rows={3}
                 required
               />
             </div>
             <div className="crud__div">
-              <label htmlFor="telefono">Telefono:</label>
+              <label htmlFor="pago">pago:</label>
               <input
-                {...register('telefono')}
-                id="telefono"
+                {...register('pago')}
+                id="pago"
                 type="number"
                 required
               />
             </div>
             <div className="crud__div">
-              <label htmlFor="linkGoogleMaps">Ubicacion:</label>
+              <label htmlFor="deuda">deuda pendiente:</label>
               <input
-                {...register('linkGoogleMaps')}
-                id="linkGoogleMaps"
+                id="deuda"
                 type="text"
+                value={tratamientosConsulta?.deuda}
                 required
               />
             </div>
@@ -79,7 +91,7 @@ const CrearConsultorio = ({ crud, setCrud }) => {
           </button>
 
           <button type="submit" className="crud__button">
-            Crear Consultorio
+            Crear Consulta
           </button>
         </section>
       </form>
@@ -87,4 +99,4 @@ const CrearConsultorio = ({ crud, setCrud }) => {
   );
 };
 
-export default CrearConsultorio;
+export default AgregarConsulta;

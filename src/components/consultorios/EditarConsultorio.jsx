@@ -69,6 +69,26 @@ const EditarConsultorio = ({
                 required
               />
             </div>
+            <div className="crud__div">
+              <label htmlFor="telefono">Telefono:</label>
+              <input
+                {...register('telefono')}
+                id="telefono"
+                type="number"
+                defaultValue={selectConsultorio.telefono}
+                required
+              />
+            </div>
+            <div className="crud__div">
+              <label htmlFor="linkGoogleMaps">Ubicacion:</label>
+              <input
+                {...register('linkGoogleMaps')}
+                id="linkGoogleMaps"
+                type="text"
+                defaultValue={selectConsultorio.linkGoogleMaps}
+                required
+              />
+            </div>
           </section>
         ) : null}
         <section className="crud__sectionTwo">

@@ -54,7 +54,8 @@ const Header = ({ userData, idConsultorio }) => {
             to={`/consultorio/${idConsultorio}/consultas`}
             className="header__link"
           >
-            <i className="bx bxs-calendar"></i> <p>Consultas</p>
+            <i className="bx bxs-calendar"></i>{' '}
+            <p>Plan de Tratamiento</p>
           </Link>
           <Link
             to={`/consultorio/${idConsultorio}/pacientes`}

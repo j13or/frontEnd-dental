@@ -136,18 +136,20 @@ const UpdateUser = ({ crud, setCrud, selectUser, setSelectUser }) => {
                 <option value="Secretaria">Secretaria</option>
               </select>
             </div>
-            <div className="crud__div">
-              <label htmlFor="estado">Estado:</label>
-              <select
-                {...register('estado')}
-                id="estado"
-                defaultValue={selectUser.estado}
-                required
-              >
-                <option value="Activo">Activo</option>
-                <option value="Desconectado">Desconectado</option>
-              </select>
-            </div>
+            {selectUser.estado === 'Desconectado' && (
+              <div className="crud__div">
+                <label htmlFor="estado">Estado:</label>
+                <select
+                  {...register('estado')}
+                  id="estado"
+                  defaultValue={selectUser.estado}
+                  required
+                >
+                  <option value="Activo">Activo</option>
+                  <option value="Desconectado">Desconectado</option>
+                </select>
+              </div>
+            )}
           </section>
         ) : null}
         <section className="crud__sectionTwo">

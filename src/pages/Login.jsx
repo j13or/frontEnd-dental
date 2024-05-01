@@ -14,12 +14,20 @@ const Login = () => {
     axios
       .post(url, data)
       .then((res) => {
+        console.log(res.data.usuario.consultorioId);
         localStorage.setItem('token', res.data.token);
         const userDataJSON = JSON.stringify(res.data);
         localStorage.setItem('userData', userDataJSON);
 
-        navigate('/');
-        window.location.reload();
+        if (res.data.usuario.consultorioId) {
+          navigate(
+            `/consultorio/${res.data.usuario.consultorioId}/inicio`
+          );
+          window.location.reload();
+        } else {
+          navigate('/');
+          window.location.reload();
+        }
       })
 
       .catch((err) => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import config from '../../utils/getToken';
@@ -18,9 +18,11 @@ const CrearConsulta = ({
   const { id } = useParams();
 
   const { register, handleSubmit, reset } = useForm();
+  const [selectedFileImg, setSelectedFileImg] = useState(null);
 
+  console.log(selectedFileImg);
   const submit = (data) => {
-    const url = `${import.meta.env.VITE_URL_API}/consulta/${
+    const url = `${import.meta.env.VITE_URL_API}/plan-tratamiento/${
       selectPaciente.id
     }`;
 
@@ -42,8 +44,9 @@ const CrearConsulta = ({
         setCrud('');
         setSelectDiente();
         setVerPacientes(false);
+        setSelectedFileImg();
         setVerOdontograma(false);
-        toast.success('La consulta  se creo exitosamente');
+        toast.success('El tratamiento  se creo exitosamente');
       })
       .catch((err) => {
         console.log(err);
@@ -84,7 +87,7 @@ const CrearConsulta = ({
         onSubmit={handleSubmit(submit)}
       >
         <h3>
-          Guardar la consulta para el Paciente{' '}
+          Guardar el tratamiento para el Paciente{' '}
           {selectPaciente?.nombres} {selectPaciente?.apellidoPaterno}
         </h3>
         {crud === 'crearConsulta' ? (
@@ -100,10 +103,10 @@ const CrearConsulta = ({
               />
             </div>
             <div className="crearConsultaForm__div">
-              <label htmlFor="descripcion">Descripcion:</label>
+              <label htmlFor="observaciones">Observaciones:</label>
               <textarea
-                {...register('descripcion')}
-                id="descripcion"
+                {...register('observaciones')}
+                id="observaciones"
                 onKeyPress={soloLetrasYEspacios}
                 rows={4}
                 required
@@ -113,27 +116,30 @@ const CrearConsulta = ({
               <label htmlFor="montoTotal">Precio Total:</label>
               <input
                 {...register('montoTotal')}
-                id="montoTotals"
+                id="montoTotal"
                 type="number"
                 value={montoTotal()}
                 required
               />
             </div>
             <div className="crearConsultaForm__div">
-              <label htmlFor="adelantoPago">Adelanto de pago:</label>
+              <label htmlFor="acuenta">Acuenta:</label>
               <input
-                {...register('adelantoPago')}
-                id="adelantoPago"
+                {...register('acuenta')}
+                id="acuenta"
                 type="number"
                 required
               />
             </div>
             <div className="crearConsultaForm__div">
-              <label htmlFor="linkFile">Subir Odontograma:</label>
+              <label htmlFor="linkFile">Subir documento :</label>
               <input
                 {...register('linkFile')}
                 name="linkFile"
                 id="linkFile"
+                onChange={(e) =>
+                  setSelectedFileImg(e.target.files[0])
+                }
                 type="file"
               />
             </div>
@@ -145,7 +151,7 @@ const CrearConsulta = ({
           </button>
 
           <button type="submit" className="crud__button">
-            Crear Consulta
+            Crear Tratamiento
           </button>
         </section>
       </form>

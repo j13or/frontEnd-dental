@@ -16,7 +16,6 @@ const CrearCita = ({
 
   const { register, handleSubmit, reset } = useForm();
   const [fecha, setFecha] = useState('');
-  const fechaSeleccionada = new Date(fecha);
 
   const submit = (data) => {
     const url = `${import.meta.env.VITE_URL_API}/cita/paciente/${
@@ -24,19 +23,9 @@ const CrearCita = ({
     }`;
 
     const fechaSeleccionada = new Date(fecha);
-    const fechaNumero =
-      (fechaSeleccionada.getDate() + 1) * 1000000 +
-      (fechaSeleccionada.getMonth() + 1) * 10000 +
-      fechaSeleccionada.getFullYear();
-
     const fechaActual = new Date();
-    const fechaActualNumero =
-      fechaActual.getDate() * 1000000 +
-      (fechaActual.getMonth() + 1) * 10000 +
-      fechaActual.getFullYear();
-    console.log(fechaNumero);
 
-    if (fechaNumero >= fechaActualNumero) {
+    if (fechaSeleccionada >= fechaActual) {
       axios
         .post(url, { ...data, consultorioId: id }, config)
         .then((res) => {
