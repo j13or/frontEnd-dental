@@ -16,11 +16,11 @@ const Reportes = () => {
   useEffect(() => {
     const url = `${
       import.meta.env.VITE_URL_API
-    }/consulta/consultorio/${id}/?date=${date}`;
+    }/plan-tratamiento/consultorio/${id}/?date=${date}`;
     axios
       .get(url, config)
       .then((res) => {
-        setConsultas(res.data.consultas);
+        setConsultas(res.data.planTratamientos);
       })
       .catch((err) => {
         console.log(err);
