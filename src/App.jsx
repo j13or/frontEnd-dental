@@ -38,6 +38,10 @@ function App() {
         <Route path="/log-in" element={<Login />} />
         <Route element={<ProtectedRoutes />}>
           <Route path="/" element={<Consultorios />} />
+          <Route
+            path="/perfil"
+            element={<Perfil userData={userData?.usuario} />}
+          />
           <Route path="/users" element={<Users />} />
 
           <Route
