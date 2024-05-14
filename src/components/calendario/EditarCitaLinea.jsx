@@ -40,6 +40,13 @@ const EditarCitaLinea = ({
           CONFIRMAR EL ESTADO DE LA CITA DE{' '}
           {selectCita?.nombresApellidos}
         </h3>
+        <i
+          class="bx bxs-x-circle"
+          onClick={() => {
+            setCrud(''), setSelectCita();
+            reset();
+          }}
+        ></i>
         {crud === 'updateCitaLinea' ? (
           <section className="crud__sectionOne">
             <div className="crud__div">
@@ -51,23 +58,13 @@ const EditarCitaLinea = ({
                 defaultValue={selectCita.estado}
                 required
               >
-                <option value="activo">activo</option>
-                <option value="inactivo">inactivo</option>
+                <option value="activo">Confirmar</option>
+                <option value="inactivo">Cancelar</option>
               </select>
             </div>
           </section>
         ) : null}
         <section className="crud__sectionTwo">
-          <button
-            type="button"
-            onClick={() => {
-              setCrud(''), setSelectCita();
-              reset();
-            }}
-          >
-            Cancelar
-          </button>
-
           <button type="submit" className="crud__button">
             guardar
           </button>

@@ -1,11 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import './pagesStyle/header.css';
+import config from '../utils/getToken';
+import axios from 'axios';
 
-const Header = ({ userData, idConsultorio }) => {
+const Header = ({ userData, idConsultorio, setidConsultorio }) => {
   const navigate = useNavigate();
+  const [consultorio, setconsultorio] = useState();
 
-  console.log(userData);
+  useEffect(() => {
+    const url = `${import.meta.env.VITE_URL_API}/consultorio/${
+      idConsultorio || userData.idConsultorio
+    }`;
+    axios
+
+      .get(url, config)
+      .then((res) => {
+        setconsultorio(res.data.consultorio);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [idConsultorio, userData]);
+
+  console.log(consultorio);
   return (
     <header className="header__container">
       {userData?.rol === 'SuperAdmin' && !idConsultorio && (
@@ -34,6 +53,18 @@ const Header = ({ userData, idConsultorio }) => {
 
       {userData?.rol === 'SuperAdmin' && idConsultorio && (
         <>
+          <a className="header__link">
+            <i class="bx bx-plus-medical"></i>{' '}
+            <p> {consultorio?.nombreConsultorio}</p>
+          </a>
+          <Link
+            className="header__link"
+            to="/"
+            onClick={() => setidConsultorio()}
+          >
+            <i class="bx bx-left-arrow-alt"></i> <p> volver</p>
+          </Link>
+
           <Link className="header__link" to="/">
             <i className="bx bxs-store"></i> <p>Tus Consultorios</p>
           </Link>
@@ -82,6 +113,12 @@ const Header = ({ userData, idConsultorio }) => {
             to={`/consultorio/${idConsultorio}/tratamiento`}
           >
             <i className="bx bxs-report"></i> <p>Tratamientos</p>
+          </Link>
+          <Link
+            className="header__link"
+            to={`/consultorio/${idConsultorio}/tipo-sangre`}
+          >
+            <i class="bx bxs-donate-blood"></i> <p>Tipos de Sangre</p>
           </Link>
           <Link
             className="header__link"

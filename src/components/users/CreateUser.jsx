@@ -32,7 +32,9 @@ const CreateUser = ({ crud, setCrud }) => {
       .catch((err) => {
         console.log(err);
         setCrud('');
-        toast.error('Hubo un error al crear el usuario');
+        toast.error(
+          'Hubo un herror, ya existe un administrador para este consultorio'
+        );
       });
     reset();
   };
@@ -49,6 +51,8 @@ const CreateUser = ({ crud, setCrud }) => {
         console.log(err);
       });
   }, []);
+
+  console.log(allConsultorios);
 
   return (
     <div
@@ -89,6 +93,9 @@ const CreateUser = ({ crud, setCrud }) => {
                 id="nombres"
                 type="text"
                 onKeyPress={soloLetrasYEspacios}
+                onChange={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                }}
                 required
               />
             </div>
@@ -99,6 +106,9 @@ const CreateUser = ({ crud, setCrud }) => {
                 id="apellidos"
                 type="text"
                 onKeyPress={soloLetrasYEspacios}
+                onChange={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                }}
                 required
               />
             </div>

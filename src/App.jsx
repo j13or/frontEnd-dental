@@ -17,13 +17,13 @@ import { useState } from 'react';
 import Tratamientos from './pages/Tratamientos';
 import Perfil from './pages/Perfil';
 import PlanTratamiento from './pages/PlanTratamiento';
+import TiposSangre from './pages/TiposSangre';
 
 function App() {
   const userDataJSON = localStorage.getItem('userData');
   const userData = JSON.parse(userDataJSON);
   const [idConsultorio, setidConsultorio] = useState();
 
-  console.log(userData?.usuario?.consultorioId);
   return (
     <>
       <ToastContainer />
@@ -32,6 +32,7 @@ function App() {
         <Header
           userData={userData?.usuario}
           idConsultorio={idConsultorio}
+          setidConsultorio={setidConsultorio}
         />
       ) : null}
       <Routes>
@@ -71,6 +72,10 @@ function App() {
           <Route
             path="/consultorio/:id/tratamiento"
             element={<Tratamientos />}
+          />
+          <Route
+            path="/consultorio/:id/tipo-sangre"
+            element={<TiposSangre />}
           />
           <Route path="/consultorio/:id/users" element={<Users />} />
         </Route>

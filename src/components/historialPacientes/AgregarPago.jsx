@@ -4,11 +4,11 @@ import { useForm } from 'react-hook-form';
 import config from '../../utils/getToken';
 import { toast } from 'react-toastify';
 
-const AgregarConsulta = ({ crud, setCrud, tratamientosConsulta }) => {
+const AgregarPago = ({ crud, setCrud, tratamientosConsulta }) => {
   const { register, handleSubmit, reset } = useForm();
 
   const submit = (data) => {
-    const url = `${import.meta.env.VITE_URL_API}/consulta/${
+    const url = `${import.meta.env.VITE_URL_API}/pagos/${
       tratamientosConsulta.id
     }`;
 
@@ -23,10 +23,10 @@ const AgregarConsulta = ({ crud, setCrud, tratamientosConsulta }) => {
       )
       .then((res) => {
         setCrud('');
-        toast.success('La consulta  se creo exitosamente');
+        toast.success('El pago   se agrego exitosamente');
       })
       .catch((err) => {
-        toast.error('hubo un error al crear la consulta');
+        toast.error('hubo un error al agregar el pago');
         setCrud('');
       });
     reset();
@@ -35,15 +35,15 @@ const AgregarConsulta = ({ crud, setCrud, tratamientosConsulta }) => {
   return (
     <div
       className={`crud__container  ${
-        crud === 'create' ? '' : 'closeCrud__container'
+        crud === 'createPago' ? '' : 'closeCrud__container'
       }`}
     >
       <form className="crud__form" onSubmit={handleSubmit(submit)}>
         <h3>
-          Nuevo Consulta para el tratamiento{' '}
+          Agregar nuevo pago para el tratamiento{' '}
           {tratamientosConsulta?.titulo}
         </h3>
-        {crud === 'create' ? (
+        {crud === 'createPago' ? (
           <section className="crud__sectionOne">
             <div className="crud__div">
               <label htmlFor="titulo">Titulo:</label>
@@ -55,12 +55,20 @@ const AgregarConsulta = ({ crud, setCrud, tratamientosConsulta }) => {
               />
             </div>
             <div className="crud__div">
-              <label htmlFor="descripcion">Observaciones:</label>
-              <textarea
-                {...register('descripcion')}
-                id="descripcion"
-                type="text"
-                rows={3}
+              <label htmlFor="fecha">Fecha:</label>
+              <input
+                {...register('fecha')}
+                id="fecha"
+                type="date"
+                required
+              />
+            </div>{' '}
+            <div className="crud__div">
+              <label htmlFor="pago">Pago:</label>
+              <input
+                {...register('pago')}
+                id="pago"
+                type="number"
                 required
               />
             </div>
@@ -72,7 +80,7 @@ const AgregarConsulta = ({ crud, setCrud, tratamientosConsulta }) => {
           </button>
 
           <button type="submit" className="crud__button">
-            Crear Consulta
+            Agregar Pago
           </button>
         </section>
       </form>
@@ -80,4 +88,4 @@ const AgregarConsulta = ({ crud, setCrud, tratamientosConsulta }) => {
   );
 };
 
-export default AgregarConsulta;
+export default AgregarPago;

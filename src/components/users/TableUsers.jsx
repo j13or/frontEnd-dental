@@ -45,6 +45,16 @@ const TableUsers = ({ allUsers, setSelectUser, setCrud }) => {
               >
                 <i className="bx bxs-trash"></i>
               </button>
+              <button
+                className="edit-button"
+                style={{ backgroundColor: 'black' }}
+                onClick={() => {
+                  setSelectUser(user);
+                  setCrud('updatePassword');
+                }}
+              >
+                <i class="bx bxs-lock-open-alt"></i>
+              </button>
             </td>
           </tr>
         ))}

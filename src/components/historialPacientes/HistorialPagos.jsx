@@ -2,39 +2,34 @@ import React, { useEffect, useState } from 'react';
 import config from '../../utils/getToken';
 import axios from 'axios';
 
-const HistorialConsultas = ({
-  crud,
-  setCrud,
-  tratamientosConsulta,
-}) => {
+const HistorialPagos = ({ crud, setCrud, tratamientosConsulta }) => {
   const [allConsultas, setAllConsultas] = useState();
 
   useEffect(() => {
     const url = `${
       import.meta.env.VITE_URL_API
-    }/consulta/plan-tratamiento/${tratamientosConsulta?.id}`;
+    }/pagos/plan-tratamiento/${tratamientosConsulta?.id}`;
     axios
       .get(url, config)
       .then((res) => {
-        setAllConsultas(res.data.consultas);
+        setAllConsultas(res.data.pagosTratamiento);
       })
 
       .catch((err) => {
         console.log(err);
       });
   }, [crud]);
-  console.log(allConsultas);
   return (
     <div
       className={`calendarioSelectPaciente__containerFixed ${
-        crud === 'consultas'
+        crud === 'pagos'
           ? ''
           : 'calendarioSelectPaciente__closeContainer'
       }`}
     >
       <div className="calendarioSelectPaciente__container">
         <section className="calendarioSelectPaciente__sectionOne">
-          <h2>Historial de consultas</h2>
+          <h2>Historial de pagos</h2>
           <article>
             <button
               className="calendarioSelectPaciente__closeButton"
@@ -43,8 +38,11 @@ const HistorialConsultas = ({
             >
               Cerrar
             </button>
-            <button type="button" onClick={() => setCrud('create')}>
-              Nuevo Consulta
+            <button
+              type="button"
+              onClick={() => setCrud('createPago')}
+            >
+              Nuevo pago
             </button>
           </article>
         </section>
@@ -52,14 +50,16 @@ const HistorialConsultas = ({
           <thead>
             <tr>
               <th>Titulo</th>
-              <th>Observaciones</th>
+              <th>Fecha</th>
+              <th>Pago</th>
             </tr>
           </thead>
           <tbody>
             {allConsultas?.map((consulta) => (
               <tr key={consulta.id}>
                 <td>{consulta.titulo}</td>
-                <td>{consulta.descripcion}</td>
+                <td>{consulta.fecha}</td>
+                <td>{consulta.pago}</td>
               </tr>
             ))}
           </tbody>
@@ -69,4 +69,4 @@ const HistorialConsultas = ({
   );
 };
 
-export default HistorialConsultas;
+export default HistorialPagos;

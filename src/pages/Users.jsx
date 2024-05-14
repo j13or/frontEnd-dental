@@ -7,6 +7,7 @@ import UpdateUser from '../components/users/UpdateUser';
 import DeleteUser from '../components/users/DeleteUser';
 import config from '../utils/getToken';
 import { useParams } from 'react-router-dom';
+import UpdatePassword from '../components/users/UpdatePassword';
 
 const Users = () => {
   const { id } = useParams();
@@ -63,6 +64,9 @@ const Users = () => {
         crud={crud}
         selectUser={selectUser}
       />
+      {crud === 'updatePassword' && (
+        <UpdatePassword selectUser={selectUser} setCrud={setCrud} />
+      )}
     </div>
   );
 };

@@ -6,6 +6,8 @@ import ListaTratamiento from '../components/planTratamiento/ListaTratamiento';
 import './pagesStyle/historialPaciente.css';
 import AgregarConsulta from '../components/historialPacientes/AgregarConsulta';
 import HistorialConsultas from '../components/historialPacientes/HistorialConsultas';
+import HistorialPagos from '../components/historialPacientes/HistorialPagos';
+import AgregarPago from '../components/historialPacientes/AgregarPago';
 const HistorialPacientes = () => {
   const { id } = useParams();
 
@@ -96,7 +98,7 @@ const HistorialPacientes = () => {
                 </th>
                 <th style={{ width: '150px' }}>Odontograma </th>
                 <th>historial del cosultas</th>
-                <th>Agregar cosultas</th>
+                <th>historial de pagos</th>
               </tr>
             </thead>
             <tbody>
@@ -135,11 +137,11 @@ const HistorialPacientes = () => {
                   </td>
                   <td
                     onClick={() => {
-                      setcrud('create'),
+                      setcrud('pagos'),
                         setTratamientosConsulta(consulta);
                     }}
                   >
-                    agregar cosulta
+                    ver historial de pagos
                   </td>
                 </tr>
               ))}
@@ -160,7 +162,19 @@ const HistorialPacientes = () => {
         tratamientosConsulta={tratamientosConsulta}
         setTratamientosConsulta={setTratamientosConsulta}
       />
+      <HistorialPagos
+        crud={crud}
+        setCrud={setcrud}
+        tratamientosConsulta={tratamientosConsulta}
+        setTratamientosConsulta={setTratamientosConsulta}
+      />
       <AgregarConsulta
+        crud={crud}
+        setCrud={setcrud}
+        tratamientosConsulta={tratamientosConsulta}
+        setTratamientosConsulta={setTratamientosConsulta}
+      />
+      <AgregarPago
         crud={crud}
         setCrud={setcrud}
         tratamientosConsulta={tratamientosConsulta}

@@ -19,6 +19,7 @@
 }
 
 .crud__form {
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -29,6 +30,15 @@
   padding: 1em;
   border-radius: 10px;
   gap: 1em;
+}
+
+.crud__form i {
+  top: 5px;
+  right: 5px;
+  position: absolute;
+  font-size: 30px;
+  color: var(--body-red);
+  cursor: pointer;
 }
 
 .crud__form h3 {

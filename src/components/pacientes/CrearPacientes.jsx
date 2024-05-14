@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import '../../pages/pagesStyle/crud.css';
@@ -12,6 +12,7 @@ const CrearPacientes = ({ crud, setCrud }) => {
   const { register, handleSubmit, reset } = useForm();
   const [selectAlergia, setselectAlergia] = useState();
   const [fecha, setFecha] = useState('');
+  const [alltiposSangre, setalltiposSangre] = useState();
 
   const submit = (data) => {
     const url = `${import.meta.env.VITE_URL_API}/paciente`;
@@ -29,6 +30,21 @@ const CrearPacientes = ({ crud, setCrud }) => {
     reset();
     setFecha();
   };
+
+  useEffect(() => {
+    const url = `${
+      import.meta.env.VITE_URL_API
+    }/tipo-sangre/consultorio/${id}`;
+    axios
+      .get(url, config)
+      .then((res) => {
+        setalltiposSangre(res.data.tiposSangre);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [crud]);
 
   function soloLetrasYEspacios(event) {
     const charCode = event.which ? event.which : event.keyCode;
@@ -68,6 +84,9 @@ const CrearPacientes = ({ crud, setCrud }) => {
                 id="nombres"
                 type="text"
                 onKeyPress={soloLetrasYEspacios}
+                onChange={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                }}
                 required
               />
             </div>
@@ -80,6 +99,9 @@ const CrearPacientes = ({ crud, setCrud }) => {
                 id="apellidoPaterno"
                 type="text"
                 onKeyPress={soloLetrasYEspacios}
+                onChange={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                }}
                 required
               />
             </div>
@@ -92,6 +114,9 @@ const CrearPacientes = ({ crud, setCrud }) => {
                 id="apellidoMaterno"
                 type="text"
                 onKeyPress={soloLetrasYEspacios}
+                onChange={(e) => {
+                  e.target.value = e.target.value.toUpperCase();
+                }}
                 required
               />
             </div>
@@ -154,12 +179,22 @@ const CrearPacientes = ({ crud, setCrud }) => {
             </div>
             <div className="crud__div">
               <label htmlFor="tipoDeSangre">Tipo de Sangre:</label>
-              <input
+              <select
                 {...register('tipoDeSangre')}
                 id="tipoDeSangre"
-                type="text"
                 required
-              />
+              >
+                <option>elijan un tipo de sangre</option>
+
+                {alltiposSangre?.map((tipoSangre) => (
+                  <option
+                    key={tipoSangre.id}
+                    value={tipoSangre.nombre}
+                  >
+                    {tipoSangre.nombre}
+                  </option>
+                ))}
+              </select>
             </div>
           </section>
         ) : null}

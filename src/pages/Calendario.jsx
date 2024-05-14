@@ -8,11 +8,12 @@ import config from '../utils/getToken';
 import TablaCitas from '../components/calendario/TablaCitas';
 import EditarCita from '../components/calendario/EditarCita';
 import EliminarCita from '../components/calendario/EliminarCita';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import EditarCitaLinea from '../components/calendario/EditarCitaLinea';
 
 const Calendar = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [crud, setCrud] = useState('');
   const [verPacientes, setVerPacientes] = useState(false);
@@ -76,7 +77,6 @@ const Calendar = () => {
     });
   };
 
-  console.log(allCitasEnLinea);
   const renderDays = () => {
     const year = date.getFullYear();
     const month = date.getMonth();
@@ -115,7 +115,14 @@ const Calendar = () => {
         >
           <span>{i}</span>
           {citasForDay?.map((cita, index) => (
-            <ul key={index}>
+            <ul
+              key={index}
+              onClick={() =>
+                navigate(
+                  `/consultorio/${id}/historial/${cita.paciente.id}`
+                )
+              }
+            >
               <li
                 style={{
                   color: 'var(--text-color-blue)',
@@ -147,6 +154,9 @@ const Calendar = () => {
                 if (cita.estado === 'confirmar') {
                   setCrud('updateCitaLinea');
                   setSelectCita(cita);
+                }
+                if (cita.estado !== 'confirmar') {
+                  navigate(`/consultorio/${id}/consultas`);
                 }
               }}
             >
