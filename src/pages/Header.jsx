@@ -134,6 +134,10 @@ const Header = ({ userData, idConsultorio, setidConsultorio }) => {
       )}
       {userData?.rol === 'Administrador' && (
         <>
+          <a className="header__link">
+            <i class="bx bx-plus-medical"></i>{' '}
+            <p> {consultorio?.nombreConsultorio}</p>
+          </a>
           <Link className="header__link" to={`/perfil`}>
             <i className="bx bxs-user"></i> <p>Perfil</p>
           </Link>
@@ -162,6 +166,7 @@ const Header = ({ userData, idConsultorio, setidConsultorio }) => {
           >
             <i className="bx bxs-user-detail"></i> <p>Pacientes</p>
           </Link>
+
           <Link
             className="header__link"
             to={`/consultorio/${userData.consultorioId}/users`}
@@ -184,6 +189,12 @@ const Header = ({ userData, idConsultorio, setidConsultorio }) => {
           </Link>
           <Link
             className="header__link"
+            to={`/consultorio/${userData.consultorioId}/tipo-sangre`}
+          >
+            <i class="bx bxs-donate-blood"></i> <p>Tipos de Sangre</p>
+          </Link>
+          <Link
+            className="header__link"
             onClick={() => {
               localStorage.clear();
               navigate('/');
@@ -196,6 +207,10 @@ const Header = ({ userData, idConsultorio, setidConsultorio }) => {
       )}
       {userData?.rol === 'Doctor' && (
         <>
+          <a className="header__link">
+            <i class="bx bx-plus-medical"></i>{' '}
+            <p> {consultorio?.nombreConsultorio}</p>
+          </a>
           <Link className="header__link" to={`/perfil`}>
             <i className="bx bxs-user"></i> <p>Perfil</p>
           </Link>
@@ -236,6 +251,12 @@ const Header = ({ userData, idConsultorio, setidConsultorio }) => {
             to={`/consultorio/${userData.consultorioId}/tratamiento`}
           >
             <i className="bx bxs-report"></i> <p>Tratamientos</p>
+          </Link>
+          <Link
+            className="header__link"
+            to={`/consultorio/${userData.consultorioId}/tipo-sangre`}
+          >
+            <i class="bx bxs-donate-blood"></i> <p>Tipos de Sangre</p>
           </Link>
           <Link
             className="header__link"
