@@ -7,13 +7,13 @@ const UpdatePassword = ({ selectUser, setCrud }) => {
   const { register, handleSubmit, reset } = useForm();
 
   console.log(selectUser);
-  const submit = (data) => {
+  const submit = () => {
     const url = `${
       import.meta.env.VITE_URL_API
-    }/usuario/update-password/${selectUser.id}`;
+    }/usuario/reset-password/${selectUser.id}`;
 
     axios
-      .patch(url, data, config)
+      .get(url, config)
       .then((res) => {
         setCrud('');
         toast.success('La contraseña se Cambio exitosamente');
@@ -33,17 +33,7 @@ const UpdatePassword = ({ selectUser, setCrud }) => {
         onSubmit={handleSubmit(submit)}
         style={{ maxWidth: '400px' }}
       >
-        <h3>Cambia Tu Contaseña</h3>
-        <div className="crud__div">
-          <label htmlFor="contraseña">Nueva Contraseña:</label>
-          <input
-            {...register('contraseña')}
-            id="contraseña"
-            type="password"
-            placeholder="ingrese su nueva contraseña"
-            required
-          />
-        </div>
+        <h3>Resetear Contaseña</h3>
 
         <section className="crud__sectionTwo">
           <button type="button" onClick={() => setCrud('')}>
@@ -51,7 +41,7 @@ const UpdatePassword = ({ selectUser, setCrud }) => {
           </button>
 
           <button type="submit" className="crud__button">
-            Cambiar contraseña
+            Resetear
           </button>
         </section>
       </form>

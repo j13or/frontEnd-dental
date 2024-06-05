@@ -25,7 +25,6 @@ const Consultorios = () => {
       });
   }, [crud]);
 
-  console.log(crud);
   return (
     <div className="consultorios__container">
       <section className="consultorio__sectionOne">

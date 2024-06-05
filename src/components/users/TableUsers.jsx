@@ -8,6 +8,7 @@ const TableUsers = ({ allUsers, setSelectUser, setCrud }) => {
         <tr>
           <th>Nombres</th>
           <th>Apellidos</th>
+          <th>Carnet</th>
           <th>Correo</th>
           <th>Telefono</th>
           <th>Consultorio</th>
@@ -21,6 +22,8 @@ const TableUsers = ({ allUsers, setSelectUser, setCrud }) => {
           <tr key={user.id}>
             <td>{user.nombres}</td>
             <td>{user.apellidos}</td>
+            <td>{user.carnet}</td>
+
             <td>{user.email}</td>
             <td>{user.telefono}</td>
             <td>{user?.consultorio?.nombreConsultorio}</td>

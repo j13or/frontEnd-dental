@@ -5,6 +5,8 @@ import '../../pages/pagesStyle/crud.css';
 import config from '../../utils/getToken';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
+import soloLetrasYEspacios from '../../hooks/LetrasYespacios';
+import soloNumeros from '../../hooks/SoloNumeros';
 
 const CrearPacientes = ({ crud, setCrud }) => {
   const { id } = useParams();
@@ -46,18 +48,6 @@ const CrearPacientes = ({ crud, setCrud }) => {
       });
   }, [crud]);
 
-  function soloLetrasYEspacios(event) {
-    const charCode = event.which ? event.which : event.keyCode;
-    if (
-      !(charCode >= 65 && charCode <= 90) && // Letras mayúsculas
-      !(charCode >= 97 && charCode <= 122) && // Letras minúsculas
-      charCode !== 32 && // Espacio
-      charCode !== 8 // Tecla de retroceso
-    ) {
-      event.preventDefault();
-    }
-  }
-
   return (
     <div
       className={`crud__container  ${
@@ -73,7 +63,10 @@ const CrearPacientes = ({ crud, setCrud }) => {
               <input
                 {...register('carnet')}
                 id="carnet"
-                type="number"
+                type="text"
+                onKeyPress={soloNumeros}
+                minLength={5}
+                maxLength={8}
                 required
               />
             </div>
@@ -102,7 +95,6 @@ const CrearPacientes = ({ crud, setCrud }) => {
                 onChange={(e) => {
                   e.target.value = e.target.value.toUpperCase();
                 }}
-                required
               />
             </div>
             <div className="crud__div">
@@ -117,7 +109,6 @@ const CrearPacientes = ({ crud, setCrud }) => {
                 onChange={(e) => {
                   e.target.value = e.target.value.toUpperCase();
                 }}
-                required
               />
             </div>
             <div className="crud__div">

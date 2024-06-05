@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import config from '../../utils/getToken';
+import soloNumeros from '../../hooks/SoloNumeros';
+import { toast } from 'react-toastify';
 
 const EditarPaciente = ({
   crud,
@@ -10,6 +12,22 @@ const EditarPaciente = ({
   setSelectPaciente,
 }) => {
   const { register, handleSubmit, reset } = useForm();
+  const [allConsultorios, setallConsultorios] = useState();
+
+  useEffect(() => {
+    const url = `${import.meta.env.VITE_URL_API}/consultorio`;
+    axios
+
+      .get(url, config)
+      .then((res) => {
+        setallConsultorios(res.data.consultorios);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  console.log(allConsultorios);
 
   const submit = (data) => {
     const url = `${import.meta.env.VITE_URL_API}/paciente/${
@@ -19,6 +37,7 @@ const EditarPaciente = ({
     axios
       .patch(url, data, config)
       .then((res) => {
+        toast.success('El paciente  se actualizo exitosamente');
         setCrud('');
         setSelectPaciente();
       })
@@ -40,6 +59,8 @@ const EditarPaciente = ({
       event.preventDefault();
     }
   }
+  console.log(selectPaciente);
+
   return (
     <div
       className={`crud__container  ${
@@ -55,8 +76,11 @@ const EditarPaciente = ({
               <input
                 {...register('carnet')}
                 id="carnet"
-                type="number"
                 defaultValue={selectPaciente.carnet}
+                type="text"
+                onKeyPress={soloNumeros}
+                minLength={5}
+                maxLength={8}
                 required
               />
             </div>
@@ -81,7 +105,6 @@ const EditarPaciente = ({
                 type="text"
                 onKeyPress={soloLetrasYEspacios}
                 defaultValue={selectPaciente.apellidoPaterno}
-                required
               />
             </div>
             <div className="crud__div">
@@ -94,7 +117,6 @@ const EditarPaciente = ({
                 type="text"
                 onKeyPress={soloLetrasYEspacios}
                 defaultValue={selectPaciente.apellidoMaterno}
-                required
               />
             </div>
             <div className="crud__div">
@@ -139,7 +161,6 @@ const EditarPaciente = ({
                 id="alergia"
                 type="text"
                 defaultValue={selectPaciente.alergia}
-                required
               />
             </div>
             <div className="crud__div">
@@ -152,14 +173,35 @@ const EditarPaciente = ({
                 required
               />
             </div>
+            <div className="crud__div">
+              <label htmlFor="consultorioId">Su consultorio:</label>
+              <select
+                {...register('consultorioId')}
+                id="consultorioId"
+                required
+              >
+                <option
+                  value={selectPaciente?.consultorio?.id}
+                  selected
+                  disabled
+                  hidden
+                >
+                  {selectPaciente?.consultorio.nombreConsultorio}
+                </option>
+                {allConsultorios?.map((consultorio) => (
+                  <option value={consultorio.id} key={consultorio.id}>
+                    {consultorio?.nombreConsultorio}
+                  </option>
+                ))}
+              </select>
+            </div>
           </section>
         ) : null}
         <section className="crud__sectionTwo">
           <button
             type="button"
             onClick={() => {
-              setCrud(''), setSelectPaciente();
-              reset();
+              setCrud(''), setSelectPaciente(), reset();
             }}
           >
             Cancelar
