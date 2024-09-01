@@ -27,7 +27,8 @@ const EditarCita = ({ crud, setCrud, selectCita, setSelectCita }) => {
       descripcion: descripcion,
       fecha: fecha,
     };
-
+    const fechaSeleccionada = new Date(fecha);
+    const fechaActual = new Date();
     if (fechaSeleccionada >= fechaActual) {
       axios
         .patch(url, newData, config)
