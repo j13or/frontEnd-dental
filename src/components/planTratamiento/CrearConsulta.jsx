@@ -20,14 +20,15 @@ const CrearConsulta = ({
   const { register, handleSubmit, reset } = useForm();
   const [selectedFileImg, setSelectedFileImg] = useState(null);
 
-  console.log(selectedFileImg);
   const submit = (data) => {
     const url = `${import.meta.env.VITE_URL_API}/plan-tratamiento/${
       selectPaciente.id
     }`;
 
     const formData = new FormData();
-    formData.append('linkFile', selectedFileImg);
+    if (selectedFileImg) {
+      formData.append('linkFile', selectedFileImg);
+    }
 
     // Agregar otros datos al FormData
     formData.append('data', JSON.stringify(data));
