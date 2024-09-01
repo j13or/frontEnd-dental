@@ -1,0 +1,17 @@
+.reportes_sectionTwo {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.reportes_sectionTwo h2 {
+  font-size: 1.3em;
+}
+.reportes_sectionTwo select {
+  width: 300px;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  border: 1px solid var(--text-color-darkSkyBlue);
+  border-radius: 5px;
+}

@@ -1,16 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './pagesStyle/consultas.css';
+import './pagesStyle/reportes.css';
+
 import axios from 'axios';
 import config from '../utils/getToken';
-import TablaConsultas from '../components/planTratamiento/TablaConsultas';
-import * as XLSX from 'xlsx';
 import { useParams } from 'react-router-dom';
+import ReportesTablaPlanTramiento from '../components/reportes/ReportesTablaPlanTramiento';
+import ReportesTablaConsultas from '../components/reportes/ReportesTablaConsultas';
+import ReportesTablaCitas from '../components/reportes/ReportesTablaCitas';
+import { useDownloadExcel } from 'react-export-table-to-excel';
 
 const Reportes = () => {
   const { id } = useParams();
+
   const today = new Date().toISOString().split('T')[0];
   const [crud, setCrud] = useState('');
   const [consultas, setConsultas] = useState();
+  const [citas, setcitas] = useState();
+  const [planTratamientos, setplanTratamientos] = useState();
+
   const [date, setDate] = useState(today);
 
   useEffect(() => {
@@ -20,14 +28,42 @@ const Reportes = () => {
     axios
       .get(url, config)
       .then((res) => {
-        setConsultas(res.data.planTratamientos);
+        setplanTratamientos(res.data.planTratamientos);
       })
       .catch((err) => {
         console.log(err);
       });
   }, [crud, date]);
 
-  console.log(consultas);
+  useEffect(() => {
+    const url = `${
+      import.meta.env.VITE_URL_API
+    }/cita/consultorio/${id}?fecha=${date}`;
+    axios
+      .get(url, config)
+      .then((res) => {
+        setcitas(res.data.citas);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [crud, date]);
+
+  useEffect(() => {
+    const url = `${
+      import.meta.env.VITE_URL_API
+    }/consulta/consultorio/${id}?date=${date}`;
+    axios
+      .get(url, config)
+      .then((res) => {
+        setConsultas(res.data.consultas);
+      })
+
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [crud, date]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -36,22 +72,23 @@ const Reportes = () => {
     setDate(selectedDate);
   };
 
-  const exportToExcel = () => {
-    const filename = 'reporte_consultas.xlsx';
-    const ws = XLSX.utils.json_to_sheet(consultas);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Consultas');
-    XLSX.writeFile(wb, filename);
-  };
-
   return (
     <div className="consultas__container">
       <section className="consultas__sectionOne">
-        <h1>Reporte de Consultas</h1>
+        <h1>Reportes</h1>
       </section>
-      <section className="consultas__sectionTwo">
-        <h2>Tus Consultas de {today === date ? 'Hoy' : date}</h2>
-        <button onClick={exportToExcel}>Exportar Excel</button>
+      <section className="reportes_sectionTwo">
+        <h2>Seleccione El tipo de reporte</h2>
+        <select
+          name="selectReport"
+          id="selectReport"
+          onChange={(e) => setCrud(e.target.value)}
+        >
+          <option value="0">seleccione un Reporte</option>
+          <option value="Citas">Citas</option>
+          <option value="Consultas">Consultas</option>
+          <option value="Pacientes">Pacientes</option>
+        </select>
       </section>
       <section className="consultas__sectionThree">
         <h3>Filtrar por Fecha</h3>
@@ -60,8 +97,15 @@ const Reportes = () => {
           <button type="submit">Filtrar</button>
         </form>
       </section>
-
-      <TablaConsultas consultas={consultas} setCrud={setCrud} />
+      {crud === 'Citas' ? (
+        <ReportesTablaCitas citas={citas} />
+      ) : crud === 'Consultas' ? (
+        <ReportesTablaConsultas consultas={consultas} />
+      ) : (
+        <ReportesTablaPlanTramiento
+          planTratamientos={planTratamientos}
+        />
+      )}
     </div>
   );
 };
