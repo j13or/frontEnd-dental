@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import config from '../../utils/getToken';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const EditarCita = ({ crud, setCrud, selectCita, setSelectCita }) => {
   const { register, handleSubmit, reset } = useForm();
@@ -10,15 +11,11 @@ const EditarCita = ({ crud, setCrud, selectCita, setSelectCita }) => {
   const [descripcion, setDescripcion] = useState();
   const [fecha, setFecha] = useState();
 
-  console.log(fecha);
-
   useEffect(() => {
     setTitulo(selectCita?.titulo);
     setDescripcion(selectCita?.descripcion);
     setFecha(selectCita?.fecha);
   }, [selectCita]);
-
-  console.log(titulo);
 
   const submit = () => {
     const url = `${import.meta.env.VITE_URL_API}/cita/${
@@ -31,17 +28,23 @@ const EditarCita = ({ crud, setCrud, selectCita, setSelectCita }) => {
       fecha: fecha,
     };
 
-    axios
-      .patch(url, newData, config)
-      .then((res) => {
-        setCrud('');
-        setSelectCita();
-      })
-      .catch((err) => {
-        console.log(err);
-        setCrud('');
-      });
-    reset();
+    if (fechaSeleccionada >= fechaActual) {
+      axios
+        .patch(url, newData, config)
+        .then((res) => {
+          setCrud('');
+          setSelectCita();
+        })
+        .catch((err) => {
+          console.log(err);
+          setCrud('');
+        });
+      reset();
+    } else {
+      toast.error(
+        'La fecha seleccionada no puede ser anterior a la fecha actual'
+      );
+    }
   };
 
   function soloLetrasYEspacios(event) {
